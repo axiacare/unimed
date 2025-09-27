@@ -3,22 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Painel Populacional - Oncologia (em terapia VO)</title>
-<meta name="description" content="Painel interativo para análise de pacientes em terapia oncológica via oral, Escritório de Valor em Saúde - Unimed GV." />
+<title>Painel Unificado – Oncologia (VO) | EVS Unimed GV</title>
+<meta name="description" content="Painel populacional unificado com resumos clínicos (leitura óptica AI) para terapia oncológica via oral – Escritório de Valor em Saúde (Unimed GV)." />
 
 <!-- Open Graph -->
-<meta property="og:title" content="Painel Populacional - Oncologia (VO) — EVS Unimed GV" />
-<meta property="og:description" content="Análise dinâmica da carteira de terapia oncológica via oral." />
+<meta property="og:title" content="Painel Unificado – Oncologia (VO) | EVS Unimed GV" />
+<meta property="og:description" content="População em terapia VO + resumos clínicos integrados." />
 <meta property="og:image" content="https://i.imgur.com/dEhZugB.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:type" content="website" />
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Painel Populacional - Oncologia (VO) — EVS Unimed GV" />
-<meta name="twitter:description" content="Análise dinâmica da carteira de terapia oncológica via oral." />
-<meta name="twitter:image" content="https://i.imgur.com/dEhZugB.png" />
 
 <!-- Libs -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -76,15 +70,25 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-
 
 /* Tabela */
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
-.table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
+.table{width:100%;border-collapse:separate;border-spacing:0;min-width:980px}
 .table thead th{position:sticky;top:0;background:#f9fafb;font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);text-align:left;padding:10px;border-bottom:1px solid var(--line)}
 .table tbody td{padding:10px;border-bottom:1px solid var(--line);font-size:14px}
 .table tbody tr:hover{background:#fbfdff}
 
+/* Modal de resumo clínico */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:9999}
+.modal .box{width:min(92vw,820px);background:#fff;border-radius:14px;border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.2);padding:16px}
+.modal .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.modal .hd h3{margin:0;font-size:18px}
+.modal .close{border:1px solid #e5e7eb;background:#f9fafb;border-radius:8px;padding:6px 10px;cursor:pointer}
+.modal .grid{grid-template-columns:1fr 1fr}
+.modal .card h4{margin:0 0 6px 0;font-size:13px;color:#0b4a49}
+.modal .kv{font-size:14px;margin:2px 0}
+
 /* Rodapé ações */
 .page-actions{margin:18px 0 32px;display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:12px;flex-wrap:wrap}
 
-/* Footer AxiaCare */
+/* Footer */
 .footer{margin-top:40px;padding:25px 15px;background:#f8f5f0;text-align:center;font-family:Verdana,sans-serif;border-top:2px solid #006b68}
 .footer-logo{width:140px;margin:0 auto 10px;display:block}
 .footer-title{font-size:15px;font-weight:bold;color:#333;margin:10px 0 18px}
@@ -96,8 +100,8 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-
 
 .hidden{display:none !important}
 
-/* Login overlay (opcional e simples, controlado por flag) */
-#gate{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;backdrop-filter:saturate(120%) blur(2px);z-index:9999}
+/* Login overlay */
+#gate{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;backdrop-filter:saturate(120%) blur(2px);z-index:9998}
 #gate .card{width:min(92vw,420px);background:#fff;border-radius:12px;padding:18px;border:1px solid #e6efee;box-shadow:0 8px 22px rgba(0,0,0,.18)}
 #gate h3{margin:0 0 8px 0;color:#083c3b}
 #gate p{margin:0 0 10px 0;color:#4b4b4b;font-size:14px}
@@ -105,21 +109,29 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-
 #gate .btn{width:100%;padding:10px 12px;border:1px solid #0a5b59;background:#0a5b59;color:#fff;border-radius:8px;cursor:pointer}
 #gate.hide{display:none !important}
 
-/* Snackbar */
+/* Snackbar e Loader */
 .snack{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;box-shadow:0 6px 18px rgba(0,0,0,.2);display:none;z-index:9999}
 .snack.show{display:block}
-
-/* Loader fino */
 .loader{display:none;place-items:center}
 .loader span{display:inline-block;width:8px;height:8px;margin:0 3px;background:#93c5fd;border-radius:999px;animation:b 1s infinite alternate}
 .loader span:nth-child(2){animation-delay:.2s}
 .loader span:nth-child(3){animation-delay:.4s}
 @keyframes b{to{transform:translateY(-6px)}}
+
+/* Responsividade extra */
+@media (max-width:480px){
+  .header{padding:8px 12px}
+  .brand h1{font-size:16px}
+  .brand .subtitle{font-size:11px}
+  .content{padding:14px 12px 6px}
+  .toolbar .btn{flex:1 1 46%}
+  .pill{font-size:11px}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN (ligue/desligue com REQUIRE_LOGIN=true/false no script) -->
+<!-- Gate -->
 <div id="gate">
   <div class="card">
     <h3>Acesso verificado</h3>
@@ -132,16 +144,16 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-
 <header class="header">
   <div class="header-inner">
     <div class="brand">
-      <img src="https://i.imgur.com/6Ye2PA6.png" alt="Escritório de Valor" />
+      <img src="https://i.imgur.com/6Ye2PA6.png" alt="EVS" />
       <div>
-        <h1>Painel Populacional - Oncologia (em terapia VO)</h1>
-        <div class="subtitle">Escritório de Valor em Saúde - Unimed GV</div>
+        <h1>Painel Unificado – Oncologia (VO)</h1>
+        <div class="subtitle">População + Resumos clínicos (AI)</div>
       </div>
     </div>
     <div class="header-actions">
       <label class="btn secondary">
         <input id="fileInput" type="file" accept=".csv,.xlsx,.xls" class="hidden" />
-        Importar novo arquivo
+        Importar XLSX/CSV (alternativo)
       </label>
       <button class="btn" id="btnReload">Atualizar dados</button>
     </div>
@@ -182,13 +194,16 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-
   </section>
 
   <section class="card" style="margin-top:16px;">
-    <h3 style="display:flex;justify-content:space-between;align-items:center">Tabela de pacientes <span class="loader" id="loader"><span></span><span></span><span></span></span></h3>
+    <h3 style="display:flex;justify-content:space-between;align-items:center">
+      Tabela de pacientes
+      <span class="loader" id="loader"><span></span><span></span><span></span></span>
+    </h3>
     <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>
             <th>Nome</th><th>Matrícula</th><th>Idade</th><th>Sexo</th>
-            <th>CID</th><th>Descrição CID</th><th>Status</th><th>Observações</th>
+            <th>CID</th><th>Descrição CID</th><th>Status</th><th>Observações</th><th>Resumo</th>
           </tr>
         </thead>
         <tbody id="tbl"></tbody>
@@ -225,17 +240,99 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-
   </div>
 </main>
 
+<!-- Modal de resumo -->
+<div class="modal" id="modalResumo">
+  <div class="box">
+    <div class="hd">
+      <h3 id="mTitle">Resumo clínico</h3>
+      <button class="close" onclick="closeModal()">Fechar</button>
+    </div>
+    <div class="grid" id="mBody"></div>
+  </div>
+</div>
+
 <div class="snack" id="snack">Pronto.</div>
 
 <script>
 /* ======== Config ======== */
-const REQUIRE_LOGIN = false; // se quiser obrigar e-mail, troque para true
+const REQUIRE_LOGIN = true;
 const ALLOWED_DOMAINS = ['unimedgv.com.br','unimedgv.coop.br','unihealthgv.org.br','icds.org.br'];
 const WEBHOOK_URL = 'https://hook.us2.make.com/zhy5v68dy5an4k5mekdsu3nzyx7qydea';
 
-const RELATIVE_XLSX = './oncologia-vo.xlsx'; // mesma pasta do HTML (opcional)
-const RAW_XLSX = ''; // ex.: 'https://raw.githubusercontent.com/USER/REPO/branch/unimed/oncologia-vo.xlsx'
-const DATA_JSONL = ''; // ex.: 'https://raw.githubusercontent.com/USER/REPO/branch/data/patients.jsonl'
+// Fonte populacional (JSONL consolidado)
+const DATA_JSONL = 'https://raw.githubusercontent.com/axiacare/unimed/refs/heads/main/patients.jsonl';
+
+// Fonte clínica (opcional): JSONL no formato {key:"nome##matricula",cards:[{titulo,linhas[]},...]}
+const CLINICAL_JSONL = ''; // quando publicar, preencha a URL raw do clinical.jsonl
+
+// Fallback embarcado para os 11 primeiros (resumos clínicos)
+const seedClinical = [
+  {
+    key:"adelane fernandes malta##",
+    cards:[
+      {titulo:"Identificação",linhas:["Dr. André Mendes de Vasconcellos (CRM-MG 40.459) · NEO"]},
+      {titulo:"Diagnóstico",linhas:["Neoplasia em fase de radioterapia"]},
+      {titulo:"Terapia oral",linhas:["Temozolomida 130 mg/d; 1x100 + 1x20 + 2x5 mg, 1h antes da RT, jejum, por 42 dias (42/42/84)"]},
+      {titulo:"Observações",linhas:["Antieméticos antes; não abrir/mastigar cápsulas"]}
+    ]
+  },
+  {
+    key:"aline pereira costa##",
+    cards:[
+      {titulo:"Identificação",linhas:["DN 14/05/1980 · Dra. Lorena Quaresma Pereira (CRM-MG 53443/RQE 55263) · Oncoleste"]},
+      {titulo:"Diagnóstico",linhas:["Ovário alto grau – pT2N1bM0 (IIIA) · BRCA1+"]},
+      {titulo:"Terapia oral",linhas:["Olaparibe 150 mg – 2 comp VO 12/12h, contínuo"]},
+      {titulo:"Suporte",linhas:["AP 24/11/2023: pouco diferenciado em fígado/diafragma; ILV+ · Fleury BRCA1 c.1684del; GIS 62"]}
+    ]
+  },
+  { key:"andrea gomes de oliveira figueiredo##", cards:[
+    {titulo:"Identificação",linhas:["Dra. Ana Beatriz Rocha Coppoli (CRM-MG 32.876) · Oncoleste"]},
+    {titulo:"Diagnóstico",linhas:["Mama; hist. medular 1997; metástase hepática 2022"]},
+    {titulo:"Terapia oral",linhas:["Exemestano 25 mg – 1 comp/d (3 cx)"]}
+  ]},
+  { key:"cleuza israel##", cards:[
+    {titulo:"Identificação",linhas:["Dra. Ana Beatriz Rocha Coppoli (CRM-MG 32.876) · Oncoleste"]},
+    {titulo:"Diagnóstico",linhas:["Mama triplo negativo (adjuvante)"]},
+    {titulo:"Terapia oral",linhas:["Capecitabina 500 mg – 3 manhã + 3 noite por 14 dias (84 comp/ciclo)"]}
+  ]},
+  { key:"dalmira lima costa honorato##", cards:[
+    {titulo:"Identificação",linhas:["Dr. André Mendes de Vasconcellos (CRM-MG 40.459) · NEO"]},
+    {titulo:"Diagnóstico",linhas:["Mama C50 com metástase pulmonar"]},
+    {titulo:"Terapia oral",linhas:["Palbociclibe 75 mg – 21/7 (28d) · 3 cx"]}
+  ]},
+  { key:"deiwid souza mendes##", cards:[
+    {titulo:"Identificação",linhas:["Dr. Rodrigo Dutra Fontes (CRM-MG 38.281/RQE 26.537) · NEO"]},
+    {titulo:"Diagnóstico",linhas:["Leucemia mieloide crônica (LMC)"]},
+    {titulo:"Terapia oral",linhas:["Dasatinibe 100 mg – 1 comp/d, contínuo (3 meses)"]}
+  ]},
+  { key:"delio silva##", cards:[
+    {titulo:"Identificação",linhas:["Dr. Guilherme de Matos Maia (CRM-MG 65.876) · Oncoleste"]},
+    {titulo:"Diagnóstico",linhas:["Adenocarcinoma de pulmão"]},
+    {titulo:"Terapia oral",linhas:["Gefitinibe 250 mg – 1 comp/d (3 cx)"]}
+  ]},
+  { key:"dyrce de carvalho##", cards:[
+    {titulo:"Identificação",linhas:["Dra. Renata Alvarenga Brandão (CRM-MG 59.798) · NEO"]},
+    {titulo:"Diagnóstico",linhas:["Mama metastático (ósseo)"]},
+    {titulo:"Terapia oral",linhas:["Ribociclibe 200 mg – 3 comp/d, 21/7 (28d) + Anastrozol 1 mg/d"]}
+  ]},
+  { key:"edna ciribelli brasil advincula##", cards:[
+    {titulo:"Identificação",linhas:["Dr. Célio Cardoso (CRM-MG 22.762) e Dr. Guilherme de Matos Maia (CRM-MG 65.876) · Oncoleste"]},
+    {titulo:"Diagnóstico",linhas:["Mama C50; recidiva 2009; metástases óssea/pulmonar 2021; progressão 2025"]},
+    {titulo:"Terapia oral",linhas:["Ribociclibe 600 mg/d (3x200) – 21/7 (28d) + Fulvestranto IM + Zometa EV"]},
+    {titulo:"Suporte",linhas:["TC tórax 26/08/2022: derrame/infiltração pleural; TC abdome: adrenal E estável; FISH HER2–; MONALEESA-3"]}
+  ]},
+  { key:"ines brando arruda##", cards:[
+    {titulo:"Identificação",linhas:["73 a · Dra. Eusana M. L. Milbratz (CRM-MG 24.063) · Oncoleste"]},
+    {titulo:"Diagnóstico",linhas:["NSCLC EGFR L858R · IIIB pT2bN2 (pós-segmentectomia 14/12/2022)"]},
+    {titulo:"Terapia oral",linhas:["Osimertinibe 80 mg/d – adjuvante 3 anos (04/2023–04/2026)"]},
+    {titulo:"Suporte",linhas:["AP acinar; pleura+; invasão vascular+ · PD-L1 0% · PET– · ADAURA"]}
+  ]},
+  { key:"elaine silva santos souza##", cards:[
+    {titulo:"Identificação",linhas:["Dr. Rodrigo Dutra Fontes (CRM-MG 38.281) · Doutor Especialista"]},
+    {titulo:"Diagnóstico",linhas:["Leucemia mieloide crônica (LMC)"]},
+    {titulo:"Terapia oral",linhas:["Imatinibe 400 mg – 1 comp/d, contínuo (prescrição 3 meses)"]}
+  ]}
+];
 
 /* ======== Utils & Mapeamento ======== */
 function normalizeHeader(h){return String(h||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
@@ -261,18 +358,12 @@ function snack(msg){const el=document.getElementById('snack'); el.textContent=ms
 
 /* ======== Estado ======== */
 let DATA=[]; let chartCIDs=null; let chartSexo=null;
+let CLIN={}; // mapa key -> cards
 const q=document.getElementById('q'), fSexo=document.getElementById('fSexo'), fStatus=document.getElementById('fStatus'), fCID=document.getElementById('fCID');
 [q,fSexo,fStatus,fCID].forEach(el=>el.addEventListener('input',()=>refreshAll(getFiltered())));
 document.getElementById('btnReload').addEventListener('click', () => bootLoad(true));
 
 /* ======== Parsing & Render ======== */
-function parseCSV(text){
-  const sep=(text.indexOf(';')>-1&&text.indexOf(',')>-1)?';':(text.indexOf(';')>-1?';':',');
-  const lines=text.split(/\r?\n/).filter(x=>x.trim().length>0);
-  if(!lines.length) return {headers:[],rows:[]};
-  const headers=lines[0].split(sep).map(h=>h.replace(/^\uFEFF/,'')), rows=lines.slice(1).map(l=>l.split(sep));
-  return {headers,rows};
-}
 function loadFrom(headers, rows){
   const M=mapHeaders(headers); const get=(r,i)=>(i>=0?r[i]:'');
   DATA = rows.map(r=>{
@@ -280,7 +371,7 @@ function loadFrom(headers, rows){
     const matricula=String(get(r,M.matricula)||'').trim();
     const idade=toNumber(get(r,M.idade));
     const sexo=toSex(get(r,M.sexo));
-    const cid=String(get(r,M.cid)||'').trim();
+    const cid=String(get(r,M.cid)||'').trim().toUpperCase();
     const cid_desc=String(get(r,M.cid_desc)||'').trim();
     const ativoVal=get(r,M.ativo);
     const obsRaw=String(get(r,M.obs)||'').trim();
@@ -312,16 +403,20 @@ function refreshKPIs(list){
   const idades=list.filter(d=>Number.isFinite(d.idade)).map(d=>d.idade);
   const idadeMed=idades.length?Math.round(idades.reduce((a,b)=>a+b,0)/idades.length):'–';
   const m=list.filter(d=>d.sexo==='M').length, f=list.filter(d=>d.sexo==='F').length;
-
   document.getElementById('kpiTotal').textContent=total||0;
   document.getElementById('kpiAtivos').textContent=ativos||0;
   document.getElementById('kpiIdadeMed').textContent=idadeMed;
   document.getElementById('mfM').textContent=m;
   document.getElementById('mfF').textContent=f;
 }
+function resumoBtn(d,i){
+  const key = (d.nome||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()+"##"+(d.matricula||'').trim();
+  const has = !!CLIN[key];
+  return has ? `<button class="btn secondary" onclick="openResumo(${i})">Ver resumo</button>` : '';
+}
 function refreshTable(list){
   const tbody=document.getElementById('tbl');
-  tbody.innerHTML=list.map(d=>`<tr>
+  tbody.innerHTML=list.map((d,i)=>`<tr>
     <td>${escapeHTML(d.nome)}</td>
     <td>${escapeHTML(d.matricula)}</td>
     <td>${d.idade??''}</td>
@@ -330,6 +425,7 @@ function refreshTable(list){
     <td>${escapeHTML(d.cid_desc)}</td>
     <td>${d.status}</td>
     <td>${escapeHTML(d.obs)}</td>
+    <td>${resumoBtn(d,i)}</td>
   </tr>`).join('');
 }
 function refreshCharts(list){
@@ -337,42 +433,57 @@ function refreshCharts(list){
   const top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
   const labelsCID=top.map(([k])=>k), dataCID=top.map(([,v])=>v);
   const m=list.filter(d=>d.sexo==='M').length, f=list.filter(d=>d.sexo==='F').length;
-
   if(chartCIDs) chartCIDs.destroy(); if(chartSexo) chartSexo.destroy();
-
-  chartCIDs=new Chart(document.getElementById('chartCIDs'),{
-    type:'bar',
+  chartCIDs=new Chart(document.getElementById('chartCIDs'),{ type:'bar',
     data:{labels:labelsCID,datasets:[{label:'Pacientes',data:dataCID,maxBarThickness:28}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>` ${ctx.parsed.y} pacientes`}}},scales:{y:{beginAtZero:true}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}} ,scales:{y:{beginAtZero:true}}}
   });
-
   chartSexo=new Chart(document.getElementById('chartSexo'),{
-    type:'doughnut',
-    data:{labels:['M','F'],datasets:[{data:[m,f]}]},
+    type:'doughnut', data:{labels:['M','F'],datasets:[{data:[m,f]}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
   });
 }
 
-/* ======== Leitura de JSONL (GitHub/externo) ======== */
+/* ======== Modal Resumo ======== */
+function openResumo(i){
+  const d = getFiltered()[i];
+  const key = (d.nome||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()+"##"+(d.matricula||'').trim();
+  const cards = CLIN[key]; if(!cards) return;
+  document.getElementById('mTitle').textContent = `${d.nome} · ${d.matricula}`;
+  const body = document.getElementById('mBody');
+  body.innerHTML = cards.map(c=>`
+    <div class="card"><h4>${escapeHTML(c.titulo||'')}</h4>
+      ${(c.linhas||[]).map(l=>`<div class="kv">${escapeHTML(l)}</div>`).join('')}
+    </div>`).join('');
+  document.getElementById('modalResumo').style.display='flex';
+}
+function closeModal(){ document.getElementById('modalResumo').style.display='none'; }
+
+/* ======== Leitura de JSONL ======== */
 async function tryFetchJSONL(url){
   const res = await fetch(url + (url.includes('?')?'&':'?') + 'v=' + Date.now(), {cache:'no-store'});
   if(!res.ok) throw new Error('HTTP '+res.status);
   const text = await res.text();
   const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-  // Esperado: headers na 1ª linha se for CSV; aqui é JSONL, então converte
   const rows = lines.map(l => JSON.parse(l));
-  // Transformar JSONL em matriz headers/rows seguindo seu schema (name, resumo, cards...) NÃO se aplica à tabela populacional.
-  // Assumimos JSONL com colunas populacionais (nome, matricula, idade, sexo, cid, cid_desc, status, obs):
-  // Se vier no seu outro schema, ajuste aqui o mapeamento.
   const headers = ['nome','matricula','idade','sexo','cid','cid_desc','status','obs'];
-  const normRows = rows.map(r => [r.nome,r.matricula,r.idade,r.sexo,r.cid,r.cid_desc,r.status,r.obs]);
+  const normRows = rows.map(r => [r.nome??'',r.matricula??'',r.idade??'',r.sexo??'',r.cid??'',r.cid_desc??'',r.status??'',r.obs??'']);
   loadFrom(headers, normRows);
 }
-
-/* ======== Leitura dinâmica do XLSX ======== */
-async function tryFetchXLSX(url){
-  const res = await fetch(url, {cache:'no-store'});
+async function tryFetchClinicalJSONL(url){
+  const res = await fetch(url + (url.includes('?')?'&':'?')+'v='+Date.now(), {cache:'no-store'});
   if(!res.ok) throw new Error('HTTP '+res.status);
+  const text = await res.text();
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const arr = lines.map(l => JSON.parse(l));
+  arr.forEach(rec=>{
+    if(rec && rec.key && Array.isArray(rec.cards)) CLIN[rec.key] = rec.cards;
+  });
+}
+
+/* ======== XLSX ======== */
+async function tryFetchXLSX(url){
+  const res = await fetch(url, {cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status);
   const buf = await res.arrayBuffer();
   const wb = XLSX.read(buf, {type:'array'});
   const sh = wb.Sheets[wb.SheetNames[0]];
@@ -382,7 +493,7 @@ async function tryFetchXLSX(url){
   loadFrom(headers, rows);
 }
 
-/* ======== Login (UX simples) ======== */
+/* ======== Login (gate com whitelist + webhook) ======== */
 function isAllowedEmail(email){
   const ok = /^[^@\s]+@([^@\s]+\.)+[^@\s]+$/.test(email);
   if(!ok) return false;
@@ -397,39 +508,38 @@ async function unlock(){
   document.getElementById('gate').style.display = 'none';
   try{
     fetch(WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ report_id: 'onco_vo_pop', email, datetime_iso: new Date().toISOString() })
+      body: JSON.stringify({ report_id: 'onco_vo_unificado', email, datetime_iso: new Date().toISOString() })
     });
   }catch(e){ console.warn('Webhook falhou:', e); }
 }
 
 /* ======== Boot ======== */
-async function bootLoad(force=false){
-  const loader=document.getElementById('loader'); loader.style.display='inline-grid';
+async function bootLoad(){
+  document.getElementById('loader').style.display='inline-grid';
   try{
-    // Query param ?src=jsonl|xlsx|file
-    const src = new URLSearchParams(location.search).get('src') || '';
-    if((DATA_JSONL && src!=='xlsx') || src==='jsonl'){
-      await tryFetchJSONL(DATA_JSONL);
-    }else{
-      try {
-        await tryFetchXLSX(RELATIVE_XLSX);
-      } catch(e1){
-        if(RAW_XLSX){ await tryFetchXLSX(RAW_XLSX); }
-        else throw e1;
-      }
+    // 1) resumos clínicos: tenta JSONL externo; se vazio, injeta seed para 11 pacientes
+    if(CLINICAL_JSONL){
+      try { await tryFetchClinicalJSONL(CLINICAL_JSONL); }
+      catch(_){ /* fallback abaixo */ }
     }
+    if(Object.keys(CLIN).length===0){
+      seedClinical.forEach(r=>{ CLIN[r.key] = r.cards; });
+    }
+
+    // 2) base populacional: JSONL oficial
+    await tryFetchJSONL(DATA_JSONL);
+
     snack('Dados carregados');
   }catch(err){
     console.warn('Falha ao carregar dados:', err);
     snack('Não foi possível carregar dados automáticos. Use "Importar novo arquivo".');
   }finally{
-    loader.style.display='none';
+    document.getElementById('loader').style.display='none';
   }
 }
-
-window.addEventListener('DOMContentLoaded', async ()=>{
-  if(REQUIRE_LOGIN){ document.getElementById('gate').style.display='flex'; }
-  await bootLoad();
+window.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('gate').style.display = REQUIRE_LOGIN ? 'flex' : 'none';
+  bootLoad();
 });
 
 /* ======== Importar/Substituir manualmente ======== */
@@ -437,7 +547,10 @@ document.getElementById('fileInput').addEventListener('change', async (e)=>{
   const file=e.target.files[0]; if(!file) return;
   const ext=file.name.split('.').pop().toLowerCase();
   if(ext==='csv'){
-    const text=await file.text(); const {headers,rows}=parseCSV(text); loadFrom(headers,rows);
+    const text=await file.text(); const lines=text.split(/\r?\n/).filter(x=>x.trim().length>0);
+    const sep=(text.indexOf(';')>-1&&text.indexOf(',')>-1)?';':(text.indexOf(';')>-1?';':',');
+    const headers=lines[0].split(sep).map(h=>h.replace(/^\uFEFF/,'')), rows=lines.slice(1).map(l=>l.split(sep));
+    loadFrom(headers,rows);
   }else if(ext==='xlsx'||ext==='xls'){
     const data=await file.arrayBuffer(); const wb=XLSX.read(data,{type:'array'});
     const sh=wb.Sheets[wb.SheetNames[0]]; const arr=XLSX.utils.sheet_to_json(sh,{header:1,raw:false,blankrows:false});
@@ -458,7 +571,7 @@ document.getElementById('btnExport').addEventListener('click',()=>{
   const a=document.createElement('a'); a.href=url; a.download='oncologia_vo_filtrado.csv'; a.click(); URL.revokeObjectURL(url);
 });
 
-/* ======== Baixar modelo XLSX ======== */
+/* ======== Download modelo XLSX ======== */
 document.getElementById('btnDownloadModelo').addEventListener('click', ()=>{
   const headers=['Nome','Matrícula','Idade','Sexo','CID','Descrição CID','Status','Observações'];
   const ws = XLSX.utils.aoa_to_sheet([headers]);
